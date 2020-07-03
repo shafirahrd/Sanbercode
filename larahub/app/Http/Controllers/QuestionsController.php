@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use DB;
 use App\questions;
+use App\answers;
 use Illuminate\Http\Request;
 
 class QuestionsController extends Controller
@@ -53,9 +54,13 @@ class QuestionsController extends Controller
      * @param  \App\questions  $questions
      * @return \Illuminate\Http\Response
      */
-    public function show(questions $questions)
+    public function show($id)
     {
-        //
+        $jawaban = answers::get_all($id);
+        $pertanyaan = questions::get_by_id($id);
+        // dd($jawaban,$pertanyaan);
+
+        return view('pertanyaan_jawaban', compact('jawaban','pertanyaan'));
     }
 
     /**
@@ -64,9 +69,11 @@ class QuestionsController extends Controller
      * @param  \App\questions  $questions
      * @return \Illuminate\Http\Response
      */
-    public function edit(questions $questions)
+    public function edit($id)
     {
-        //
+        $pertanyaan = questions::get_by_id($id);
+
+        return view('pertanyaan_edit', compact('pertanyaan'));
     }
 
     /**
@@ -76,9 +83,15 @@ class QuestionsController extends Controller
      * @param  \App\questions  $questions
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, questions $questions)
+    public function update(Request $request, $id)
     {
-        //
+        $data = $request->all();
+        // unset($data['_token'],$data['method']);
+        $insert = questions::diupdate($id, $data);
+        
+        if($insert) {
+            return redirect('/pertanyaan');
+        }
     }
 
     /**
@@ -87,8 +100,10 @@ class QuestionsController extends Controller
      * @param  \App\questions  $questions
      * @return \Illuminate\Http\Response
      */
-    public function destroy(questions $questions)
+    public function destroy($id)
     {
-        //
+        $delete = questions::hapus($id);
+
+        return redirect()->back();
     }
 }

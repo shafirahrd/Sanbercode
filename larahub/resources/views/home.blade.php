@@ -4,6 +4,9 @@
 table {
   padding: 20px;
 }
+.btn.btn-success {
+  display: inline;
+}
 @endpush
 
 @section('content')
@@ -22,9 +25,22 @@ table {
       <td>{{ $key + 1 }}</td>
       <td>{{ $item->judul }}</td>
       <td>{{ $item->isi }}</td>
-      <form action="/jawaban/{{ $item->id }}" method="GET">
-        <td><button type="submit" class="btn btn-info">Jawaban</button></td>
-      </form>
+      <td>
+        <form action="/jawaban/{{ $item->id }}" method="GET">
+          <button type="submit" class="btn btn-info">Jawaban</button>
+        </form>
+        <form action="/pertanyaan/{{ $item->id }}" method="GET">
+          <button type="submit" class="btn btn-success">Detail</button>
+        </form>
+        <form action="/pertanyaan/{{ $item->id }}/edit" method="GET">
+          <button type="submit" class="btn btn-warning">Edit</button>
+        </form>
+        <form action="/pertanyaan/{{ $item->id }}" method="POST">
+          @method('DELETE')
+          @csrf
+          <button type="submit" class="btn btn-danger">Hapus</button>
+        </form>
+      </td>
     </tr>
     @endforeach
   </tbody>
